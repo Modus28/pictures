@@ -1,0 +1,124 @@
+<!-- EECS 293: Fall 2016: HW10 Ant Build file -->
+<!-- Daniel Grigsby -->
+
+<project name="pictures" default="compile" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
+	<!-- Init Target: Sets up global variables -->
+	<target name="init">
+
+		<!-- Properties -->
+		<property environment="env" />
+		<property name="ant.home" value = "${env.ANT_HOME}" />
+		<property name="src.dir" location="${basedir}/src"/>
+		<property name="lib.dir" location="${basedir}/lib"/>
+		<property name="java.dir" location="${env.JAVA_HOME}"/>
+		<property name="scala.dir" location="${env.SCALA_HOME}"/>
+		<property name="scala-library.jar" location="${scala.dir}/lib/scala-library.jar"/>
+		<property name="scala-reflect.jar" location="${scala.dir}/lib/scala-reflect.jar"/>
+		<property name="scala-compiler.jar" location="${scala.dir}/lib/scala-compiler.jar"/>
+		<property name="build.dir" value="classes" />
+		<property name="report.dir" value="report"/>
+		<property name="junit.dir" value="${report.dir}/junit"/>
+		<property name="doc.dir" value="doc"/>
+		<property name="jacoco.dir" value="${report.dir}/jacoco"/>
+		<property name="jacoco.file" value="${jacoco.dir}/jacoco.exec"/>
+		<!-- check if any files has been modified since last build -->
+		<uptodate property="build.uptodate" targetfile="${build.dir}/build.done">
+			<srcfiles dir= "${src.dir}" includes="**"/>
+			<srcfiles dir= "${lib.dir}" includes="**"/>
+		</uptodate>
+		<!-- Paths -->
+		<path id="dyna.jars">
+			<fileset dir="${scala.dir}/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${ant.home}/lib/">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
+		<path id="project.classpath">
+			<pathelement location="${scala-library.jar}"/>
+			<pathelement location="${build.dir}"/>
+		</path>
+		<path id="hamcrest.classpath">
+			<pathelement location="${ant.home}/lib/hamcrest-core-1.3.jar"/>
+		</path>
+
+		<!--< Taskdefs />-->
+		<taskdef resource="scala/tools/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${scala.dir}/lib/scala-compiler.jar"   />
+				<pathelement location="${scala.dir}/lib/scala-reflect.jar"   />
+				<pathelement location="${scala-library.jar}"   />
+			</classpath>
+		</taskdef>
+
+		<!-- Confirm the server's environment variables  -->
+		<echo message=" Initialize Project..."/>
+		<echo message=" with scala.dir = ${env.SCALA_HOME}"/>
+		<echo message=" with java.dir = ${env.JAVA_HOME}"/>
+		<echo message=" with ant.dir = ${env.ANT_HOME}"/>
+	</target>
+
+	<!-- Build Target: Compiles Code -->
+	<target name="build" depends="init">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.dir}/dbg28"/>
+		<scalac
+			destdir="${build.dir}"
+			srcdir="${src.dir}"
+			classpath="${ant.home}/lib/"
+			classpathref="dyna.jars">
+		</scalac>
+	</target>
+
+
+	<!-- Test Target: Runs Junit tests -->
+	<target name="test" depends="build" unless="build.uptodate">
+		<mkdir dir="${report.dir}"/>
+		<mkdir dir="${junit.dir}"/>
+		<mkdir dir="${jacoco.dir}"/>
+		<jacoco:coverage destfile="${jacoco.file}">
+			<junit fork="yes" includeAntRuntime="yes" printsummary="withOutAndErr">
+				<formatter type="xml"/>
+				<batchtest fork="yes" filtertrace="off" todir="${junit.dir}">
+					<fileset dir="${build.dir}" includes="**/*Test.class"/>
+				</batchtest>
+				<classpath refid="dyna.jars"/>
+				<classpath path="${build.dir}"/>
+			</junit>
+		</jacoco:coverage>
+	</target>
+
+	<!-- Report Target: Generates JUnit & Jacoco report -->
+	<target name="report" depends="test">
+		<junitreport todir="${junit.dir}">
+			<fileset dir="${junit.dir}" includes="TEST-*.xml"/>
+			<report todir="${junit.dir}"/>
+		</junitreport>
+		<jacoco:report>
+			<executiondata>
+				<file file="${jacoco.file}"/>
+			</executiondata>
+			<structure name="${ant.project.name}">
+				<classfiles>
+					<fileset dir="${build.dir}" >
+					 <exclude name="**/*Test*.class" />
+					</fileset>
+				</classfiles>
+				<sourcefiles>
+					<fileset dir="${src.dir}"/>
+				</sourcefiles>
+			</structure>
+			<html destdir="${jacoco.dir}"/>
+		</jacoco:report>
+	</target>
+
+	<!-- Clean Target: Deletes compiled classes and report files -->
+	<target name="clean">
+		<delete dir="classes"/>
+		<delete dir="report"/>
+	</target>
+
+	<!-- Asked for by the server, not listed as required in HW7.pdf -->
+	<target name="compile" depends="build">	</target>
+</project>
