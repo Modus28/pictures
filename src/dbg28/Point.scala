@@ -7,4 +7,4 @@ package dbg28
   *
   * Point class:
   */
-case class Point(x: Int, y: Int)
+case class Point(char: Character, x: Int, y: Int)
