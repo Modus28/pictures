@@ -1,19 +1,17 @@
-package dbg28
+package dbg28.Dirty
 
-import scala.util.matching.Regex
+import dbg28.Pictures.Point
 /**
   * EECS 293
   * Created by Daniel on 11/3/2016.
   * dbg28@case.edu
+  *
+  * Accepts user input, contains dirty data
   */
 object InputHandler {
   val graphPattern = "/([A-Z*])/g".r
   val rowOrColumnPattern = "(\\d)".r
 
-  def lineToPointSet(line: String): Set[Point] = {
-    // convert String of a single line into a set of points for a letter
-    Set[Point]()
-  }
 
   def processInput(input: List[String]): Unit = {
     // Parse out the first two lines as integers and set those as locally stored variables
