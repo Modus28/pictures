@@ -1,9 +1,6 @@
 package dbg28.Dirty
 
-import java.io.{BufferedReader, ByteArrayInputStream, ByteArrayOutputStream, InputStreamReader}
-import java.nio.charset.StandardCharsets
 import annotation.tailrec
-import dbg28.Pictures.Point
 /**
   * EECS 293
   * Created by Daniel on 11/3/2016.
@@ -25,7 +22,7 @@ object InputHandler {
       val currentlyEmpty = currentLine.isEmpty
       if (currentlyEmpty && wasEmpty) input else readRecursively(currentLine +: input, currentlyEmpty)
     }
-    readRecursively(Seq[String](), false)
+    readRecursively(Seq[String](), wasEmpty = false)
   }
 
 
