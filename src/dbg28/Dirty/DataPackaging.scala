@@ -14,7 +14,7 @@ import scala.util.matching.Regex
   * On the untrusted side of the barricade
   */
 object DataPackaging {
-  val graphPattern: Regex = "/([A-Z*])/g".r
+  val graphPattern: Regex = "/([A-Z.])/g".r
   val rowOrColumnPattern: Regex = "(\\d)".r
 
 
@@ -25,20 +25,34 @@ object DataPackaging {
     val dimensions = parseDimensions(input)
     val rows  = dimensions.head
     val columns = dimensions(1)
+    // Send Rows and Columns to InputVerification
     InputVerification.setDimensions(rows, columns)
+    // The user input without the rows and columns
+    val graphStrings = partitionGraphStrings(input, rows)
+    val graphs = layerStringsToGraphs(graphStrings)
 
-    // The user input without the rows and columns and empty lines
-    val inputWithoutDimensions = input diff List(input.head, input(1),"")
-    val rowInt: Int = rows.toInt + 1
-    val graphStrings: List[List[String]] = inputWithoutDimensions.sliding(rowInt, rowInt-1).toList // check toInt failures
-    println(graphStrings)
+  }
 
-    // send all but the last one of the list of these sets to a Pictures process method
-    // Send the final set, the completed graph, to a separate processing method
+
+  def layerStringsToGraphs(allStrings: List[List[String]]): List[Graph] = {
+    List.empty[Graph]
+  }
+
+  /**
+    *  Takes the total user input and partitions it into input for each graph
+    * @param input the total input from user
+    * @param rows amount of rows each graph should contain
+    * @return a List of Lists of Strings, where each sublist is all the strings in one graph
+    */
+  private def partitionGraphStrings(input: List[String], rows: String):  List[List[String]] = {
+    val inputWithoutDimensions = input diff List(input.head, input(1))
+    val rowInt: Int = rows.toInt // maybe try catch this
+    inputWithoutDimensions.sliding(rowInt, rowInt + 1).toList // check toInt failures
   }
 
   /**
     * Parses the List form of the user input to identify
+    *
     * @param toCheck the UserInput list to find dimensions in
     * @return the Strings containing the graph dimensions
     */
