@@ -1,13 +1,16 @@
 package dbg28.Dirty
 
+import scala.util.matching.Regex
+
 
 /**
   * EECS 293
   * Created by Daniel on 11/6/2016.
   * dbg28@case.edu
   */
-class DataPackaging {
-
+object DataPackaging {
+  val graphPattern: Regex = "/([A-Z*])/g".r
+  val rowOrColumnPattern: Regex = "(\\d)".r
 
 
   def processInput(input: List[String]): Unit = {

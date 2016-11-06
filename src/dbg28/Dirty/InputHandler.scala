@@ -13,11 +13,10 @@ import dbg28.Pictures.Point
   * On the untrusted side of the barricade
   */
 object InputHandler {
-  val dataPackaging = new DataPackaging
 
   /**
     *  Method that stores stdIn until it receives two empty lines
-    * @return
+    * @return user input
     */
   private def readInput: Seq[String] = {
     @tailrec
@@ -32,6 +31,6 @@ object InputHandler {
 
   def main(args: Array[String]) {
     val userInput: Seq[String] = readInput
-    dataPackaging.processInput(userInput.toList)
+    DataPackaging.processInput(userInput.toList)
   }
 }
