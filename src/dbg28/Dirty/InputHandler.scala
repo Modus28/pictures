@@ -27,7 +27,8 @@ object InputHandler {
 
 
   def main(args: Array[String]) {
-    val userInput: Seq[String] = readInput
+    val userInput: Seq[String] = readInput.reverse
+    //userInput foreach println
     DataPackaging.processInput(userInput.toList)
   }
 }
