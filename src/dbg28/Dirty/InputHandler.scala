@@ -20,15 +20,14 @@ object InputHandler {
     def readRecursively(input: Seq[String], wasEmpty: Boolean): Seq[String] = {
       val currentLine = scala.io.StdIn.readLine()
       val currentlyEmpty = currentLine.isEmpty
-      if (currentlyEmpty && wasEmpty) input else readRecursively(currentLine +: input, currentlyEmpty)
+      if (currentlyEmpty && wasEmpty) input.reverse else readRecursively(currentLine +: input, currentlyEmpty)
     }
     readRecursively(Seq[String](), wasEmpty = false)
   }
 
 
   def main(args: Array[String]) {
-    val userInput: Seq[String] = readInput.reverse
-    //userInput foreach println
+    val userInput: Seq[String] = readInput
     DataPackaging.processInput(userInput.toList)
   }
 }

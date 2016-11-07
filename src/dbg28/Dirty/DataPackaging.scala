@@ -10,26 +10,28 @@ import scala.util.matching.Regex
   * Created by Daniel on 11/6/2016.
   * dbg28@case.edu
   *
-  * Accepts user input in List format from InputHandler, converts it into Graphs and Points\
+  * Accepts user input in List format, converts it into Graphs and Points\
   * On the untrusted side of the barricade
   */
 object DataPackaging {
   val graphPattern: Regex = "([A-Z])".r
   val rowOrColumnPattern: Regex = "(\\d)".r
 
-
+  /**
+    * Accepts user input, converts it to a usable form and sends it to be Verified
+    * @param input user input in List of Strings form
+    */
   def processInput(input: List[String]): Unit = {
-    // Parse out the first two lines as integers and set those as locally stored variables
     val dimensions = parseDimensions(input); val rows  = dimensions.head; val columns = dimensions(1)
-    // Send Dimensions to verification class
     InputVerification.setDimensions(rows, columns)
-    // Convert user input to graphs
     val graphStrings = partitionInputIntoGraphStrings(input, rows)
     val graphs = stringsToGraphs(graphStrings dropRight 1)
-    println(graphs.mkString("\n"))
-    //val mergedGraphArray = buildMergedArray(graphStrings.last, rows.toInt, columns.toInt)
+    InputVerification.addGraphs(graphs)
     val layeredGraphs = stringListToLayeredGraph(graphStrings.last)
-    //println(mergedGraphArray.deep.mkString("\n"))
+    InputVerification.addLayeredGraph(layeredGraphs)
+    InputVerification.verify()
+
+    println(graphs.mkString("\n"))
     println(layeredGraphs)
   }
 
@@ -100,19 +102,5 @@ object DataPackaging {
     var listOfGraphs: List[Graph] = mergedString.flatten.filter(isCapital).map(Graph(_, Set.empty[Point])).distinct.sorted
     listOfGraphs = listOfGraphs.map(f => stringListToGraph(mergedString, f.char))
     listOfGraphs
-  }
-
-
-  /**
-    * Creates array of arrays of characters for the fully layered graph
-    * @param mergedString the list of strings that are each one row
-    * @param rows number of rows for the array
-    * @param columns number of columns for the array
-    * @return the 2D array representation of the layered picture
-    */
-  private def buildMergedArray(mergedString: List[String], rows: Int, columns: Int): Array[Array[Char]] = {
-    val arr = Array.ofDim[Char](rows, columns)
-    for (index <- arr.indices) { arr(index) = mergedString(index).toCharArray }
-    arr
   }
 }

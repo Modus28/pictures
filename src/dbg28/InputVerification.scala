@@ -10,8 +10,8 @@ package dbg28
 object InputVerification {
   var columns = 0
   var rows = 0
-  var graphs: List[Graph] = List.empty[Graph]
-  var merged: Array[Array[Character]] = _
+  var singleGraphs: List[Graph] = List.empty[Graph]
+  var layeredGraphs: List[Graph] = List.empty[Graph]
 
 
   def setDimensions(columns: String, rows: String): Unit = {
@@ -20,16 +20,21 @@ object InputVerification {
     // add verification checks
   }
 
-  def addMergedGraph(charArray: Array[Array[Character]]): Unit = {
-    merged = charArray
-  }
+  def addLayeredGraph(layeredGraph: List[Graph]): Unit =  layeredGraphs = layeredGraph
+
+  def addGraphs(graphsList: List[Graph]): Unit =  singleGraphs = graphsList
 
   def resetVerificationState(): Unit = {
     // wipe everything
     columns = 0
     rows = 0
-    graphs = null
-    merged = null
+    singleGraphs = null
+    layeredGraphs = null
+  }
+
+  def verify(): Unit = {
+    //if conditions pass, add data to Pictures
+    // If fail, print error and do nothing
   }
 
 }
