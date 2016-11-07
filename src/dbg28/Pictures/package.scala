@@ -8,5 +8,5 @@ import scala.language.implicitConversions
   * Stores Implicit definitions and other package-wide information
   */
 package object Pictures {
-  implicit def graphToSet(g:Graph): Set[Point] = g.points
+  implicit def graphToPointSet(g:Graph): Set[Point] = g.points
 }

@@ -11,13 +11,17 @@ object InputVerification {
   var columns = 0
   var rows = 0
   var graphs: List[Graph] = List.empty[Graph]
-  var merged: Graph = Graph(null, null)
+  var merged: Array[Array[Character]] = _
 
 
   def setDimensions(columns: String, rows: String): Unit = {
     this.columns = Integer.parseInt(columns)
     this.rows = Integer.parseInt(rows)
     // add verification checks
+  }
+
+  def addMergedGraph(charArray: Array[Array[Character]]): Unit = {
+    merged = charArray
   }
 
   def resetVerificationState(): Unit = {

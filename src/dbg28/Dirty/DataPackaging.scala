@@ -29,6 +29,8 @@ object DataPackaging {
     val graphStrings = partitionInputIntoGraphStrings(input, rows)
     val graphs = stringsToGraphs(graphStrings dropRight 1)
     println(graphs.mkString("\n"))
+    val mergedGraphArray = buildMergedArray(graphStrings.last, rows.toInt, columns.toInt)
+    println(mergedGraphArray.deep.mkString("\n"))
   }
 
   /**
@@ -78,5 +80,11 @@ object DataPackaging {
     else{
       List(rows.get.group(0), columns.get.group(0))
     }
+  }
+
+  private def buildMergedArray(mergedString: List[String], rows: Int, columns: Int): Array[Array[Char]] = {
+    val arr = Array.ofDim[Char](rows, columns)
+    for (index <- arr.indices) { arr(index) = mergedString(index).toCharArray }
+    arr
   }
 }

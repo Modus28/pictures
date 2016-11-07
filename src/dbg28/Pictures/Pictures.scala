@@ -8,7 +8,7 @@ import dbg28.Graph
   *
   *
   */
-class Pictures(graphs: List[Graph] = List.empty[Graph], merged: Graph){
+object Pictures{
 
   var layerOrder: List[Character] = List()
 
