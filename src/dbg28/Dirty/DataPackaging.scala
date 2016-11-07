@@ -18,8 +18,6 @@ object DataPackaging {
   val rowOrColumnPattern: Regex = "(\\d)".r
 
 
-
-
   def processInput(input: List[String]): Unit = {
     // Parse out the first two lines as integers and set those as locally stored variables
     val dimensions = parseDimensions(input); val rows  = dimensions.head; val columns = dimensions(1)
@@ -29,16 +27,25 @@ object DataPackaging {
     val graphStrings = partitionInputIntoGraphStrings(input, rows)
     val graphs = stringsToGraphs(graphStrings dropRight 1)
     println(graphs.mkString("\n"))
-    val mergedGraphArray = buildMergedArray(graphStrings.last, rows.toInt, columns.toInt)
-    println(mergedGraphArray.deep.mkString("\n"))
+    //val mergedGraphArray = buildMergedArray(graphStrings.last, rows.toInt, columns.toInt)
+    val layeredGraphs = stringListToLayeredGraph(graphStrings.last)
+    //println(mergedGraphArray.deep.mkString("\n"))
+    println(layeredGraphs)
   }
 
   /**
-    * Converts a List of Lists of Strings to a List of Graphs
+    * Converts a list of list of Strings to a sorted list of Graphs
     * @param allStrings the Strings to convert
-    * @return List of Graphs
+    * @return List of Graphs, sorted by Letter
     */
-  private def stringsToGraphs(allStrings: List[List[String]]): List[Graph] =  allStrings map stringListToGraph
+  private def stringsToGraphs(allStrings: List[List[String]]): List[Graph] =  {
+     // Nested method that extracts character of a List[String] that is a Graph
+     def getCharOfStringList(list: CharSequence): Char =  graphPattern.findFirstIn(list).getOrElse("").head
+    allStrings.map(f => {
+      val char = getCharOfStringList(f.flatten.mkString)
+      stringListToGraph(f, char)
+    }).sorted
+  }
 
 
   /**
@@ -46,8 +53,8 @@ object DataPackaging {
     * @param list the List to convert
     * @return Graph representation of input
     */
-  private def stringListToGraph(list: List[String]): Graph = {
-    def isCapital(char: Character): Boolean =  graphPattern.findFirstIn(char.toString).isDefined
+  private def stringListToGraph(list: List[String], charExpected: Char): Graph = {
+    def isCapital(char: Char): Boolean =  graphPattern.findFirstIn(char.toString).isDefined && (char equals charExpected)
     val points = for( sIndex <- list.indices; charInd <- list(sIndex).indices if isCapital(list(sIndex)(charInd))) yield Point(sIndex, charInd)
     val char: Character = list(points.head.x)(points.head.y)
     Graph(char, points.toSet)
@@ -82,6 +89,27 @@ object DataPackaging {
     }
   }
 
+
+  /**
+    *  Converts a List of Strings containing multiple picture types into a List of Graphs of those points
+    * @param mergedString the input List of Strings
+    * @return the Graphs representing the input Strings
+    */
+  private def stringListToLayeredGraph(mergedString: List[String]): List[Graph] = {
+    def isCapital(char: Char): Boolean =  graphPattern.findFirstIn(char.toString).isDefined
+    var listOfGraphs: List[Graph] = mergedString.flatten.filter(isCapital).map(Graph(_, Set.empty[Point])).distinct.sorted
+    listOfGraphs = listOfGraphs.map(f => stringListToGraph(mergedString, f.char))
+    listOfGraphs
+  }
+
+
+  /**
+    * Creates array of arrays of characters for the fully layered graph
+    * @param mergedString the list of strings that are each one row
+    * @param rows number of rows for the array
+    * @param columns number of columns for the array
+    * @return the 2D array representation of the layered picture
+    */
   private def buildMergedArray(mergedString: List[String], rows: Int, columns: Int): Array[Array[Char]] = {
     val arr = Array.ofDim[Char](rows, columns)
     for (index <- arr.indices) { arr(index) = mergedString(index).toCharArray }
