@@ -1,6 +1,6 @@
 package dbg28.Dirty
 
-import dbg28.InputVerification
+import dbg28.{Graph, InputVerification, Point}
 
 import scala.util.matching.Regex
 
@@ -22,16 +22,13 @@ object DataPackaging {
 
   def processInput(input: List[String]): Unit = {
     // Parse out the first two lines as integers and set those as locally stored variables
-    val dimensions = parseDimensions(input)
-    val rows  = dimensions.head
-    val columns = dimensions(1)
-    // Send Rows and Columns to InputVerification
+    val dimensions = parseDimensions(input); val rows  = dimensions.head; val columns = dimensions(1)
+    // Send Dimensions to verification class
     InputVerification.setDimensions(rows, columns)
-    // The user input without the rows and columns
-    val graphStrings = partitionGraphStrings(input, rows)
-    val graphs = layerStringsToGraphs(graphStrings dropRight 1)
+    // Convert user input to graphs
+    val graphStrings = partitionInputIntoGraphStrings(input, rows)
+    val graphs = stringsToGraphs(graphStrings dropRight 1)
     println(graphs.mkString("\n"))
-
   }
 
   /**
@@ -39,18 +36,17 @@ object DataPackaging {
     * @param allStrings the Strings to convert
     * @return List of Graphs
     */
-  def layerStringsToGraphs(allStrings: List[List[String]]): List[Graph] = {
-    allStrings map stringListToGraph
-  }
+  private def stringsToGraphs(allStrings: List[List[String]]): List[Graph] =  allStrings map stringListToGraph
+
 
   /**
     * Converts a single List of lines of text to a Graph
     * @param list the List to convert
     * @return Graph representation of input
     */
-  def stringListToGraph(list: List[String]): Graph = {
+  private def stringListToGraph(list: List[String]): Graph = {
     def isCapital(char: Character): Boolean =  graphPattern.findFirstIn(char.toString).isDefined
-    val points = for( sIndex <- list.indices; charInd <- list(sIndex).indices if  isCapital(list(sIndex)(charInd))) yield Point(sIndex, charInd)
+    val points = for( sIndex <- list.indices; charInd <- list(sIndex).indices if isCapital(list(sIndex)(charInd))) yield Point(sIndex, charInd)
     val char: Character = list(points.head.x)(points.head.y)
     Graph(char, points.toSet)
   }
@@ -61,7 +57,7 @@ object DataPackaging {
     * @param rows amount of rows each graph should contain
     * @return a List of Lists of Strings, where each sublist is all the strings in one graph
     */
-  private def partitionGraphStrings(input: List[String], rows: String):  List[List[String]] = {
+  private def partitionInputIntoGraphStrings(input: List[String], rows: String):  List[List[String]] = {
     val inputWithoutDimensions = input diff List(input.head, input(1))
     val rowInt: Int = rows.toInt // maybe try catch this
     inputWithoutDimensions.sliding(rowInt, rowInt + 1).toList // check toInt failures
@@ -84,8 +80,3 @@ object DataPackaging {
     }
   }
 }
-
-/** Stores a Set of Points and an upper case character that the points contain */
-case class Graph(char: Character, points: Set[Point])
-/** Point coordinates in a 2D plane */
-case class Point(x: Int, y: Int)

@@ -11,7 +11,7 @@ object InputVerification {
   var columns = 0
   var rows = 0
   var graphs: List[Graph] = List.empty[Graph]
-  val merged: Graph = Graph(null, null)
+  var merged: Graph = Graph(null, null)
 
 
   def setDimensions(columns: String, rows: String): Unit = {
@@ -20,8 +20,13 @@ object InputVerification {
     // add verification checks
   }
 
+  def resetVerificationState(): Unit = {
+    // wipe everything
+    columns = 0
+    rows = 0
+    graphs = null
+    merged = null
+  }
+
 }
-/** Stores a Set of Points and an upper case character that the points contain */
-case class Graph(points: Set[Point], char: Character)
-/** Point coordinates in a 2D plane */
-case class Point(x: Int, y: Int)
+

@@ -1,5 +1,7 @@
 package dbg28.Pictures
 
+import dbg28.Graph
+
 
 /**
   * Pictures: Accepts Lists of Strings describing pictures and converts them into relations
@@ -22,7 +24,4 @@ class Pictures(graphs: List[Graph] = List.empty[Graph], merged: Graph){
 
 
 }
-/* Stores a Set of Points and an upper case character that the points contain */
-case class Graph(points: Set[Point], char: Character)
-/* Point coordinates in a 2D plane */
-case class Point(x: Int, y: Int)
+
