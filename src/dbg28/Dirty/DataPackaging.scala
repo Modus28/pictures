@@ -14,7 +14,7 @@ import scala.util.matching.Regex
   * On the untrusted side of the barricade
   */
 object DataPackaging {
-  val graphPattern: Regex = "/([A-Z.])/g".r
+  val graphPattern: Regex = "([A-Z])".r
   val rowOrColumnPattern: Regex = "(\\d)".r
 
 
@@ -29,13 +29,30 @@ object DataPackaging {
     InputVerification.setDimensions(rows, columns)
     // The user input without the rows and columns
     val graphStrings = partitionGraphStrings(input, rows)
-    val graphs = layerStringsToGraphs(graphStrings)
+    val graphs = layerStringsToGraphs(graphStrings dropRight 1)
+    println(graphs.mkString("\n"))
 
   }
 
-
+  /**
+    * Converts a List of Lists of Strings to a List of Graphs
+    * @param allStrings the Strings to convert
+    * @return List of Graphs
+    */
   def layerStringsToGraphs(allStrings: List[List[String]]): List[Graph] = {
-    List.empty[Graph]
+    allStrings map stringListToGraph
+  }
+
+  /**
+    * Converts a single List of lines of text to a Graph
+    * @param list the List to convert
+    * @return Graph representation of input
+    */
+  def stringListToGraph(list: List[String]): Graph = {
+    def isCapital(char: Character): Boolean =  graphPattern.findFirstIn(char.toString).isDefined
+    val points = for( sIndex <- list.indices; charInd <- list(sIndex).indices if  isCapital(list(sIndex)(charInd))) yield Point(sIndex, charInd)
+    val char: Character = list(points.head.x)(points.head.y)
+    Graph(char, points.toSet)
   }
 
   /**
@@ -69,6 +86,6 @@ object DataPackaging {
 }
 
 /** Stores a Set of Points and an upper case character that the points contain */
-case class Graph(points: Set[Point], char: Character)
+case class Graph(char: Character, points: Set[Point])
 /** Point coordinates in a 2D plane */
 case class Point(x: Int, y: Int)
