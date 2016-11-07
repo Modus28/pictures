@@ -10,7 +10,7 @@ import dbg28.Graph
   */
 object Pictures{
 
-  var layerOrder: List[Character] = List()
+  var layerOrder: List[Char] = List()
 
 
 

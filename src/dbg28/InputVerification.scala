@@ -20,9 +20,9 @@ object InputVerification {
     // add verification checks
   }
 
-  def addLayeredGraph(layeredGraph: List[Graph]): Unit =  layeredGraphs = layeredGraph
+  def addLayeredGraph(layeredGraph: List[Graph]): Unit = layeredGraphs = layeredGraph
 
-  def addGraphs(graphsList: List[Graph]): Unit =  singleGraphs = graphsList
+  def addGraphs(graphsList: List[Graph]): Unit = singleGraphs = graphsList
 
   def resetVerificationState(): Unit = {
     // wipe everything
