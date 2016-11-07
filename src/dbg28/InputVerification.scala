@@ -1,5 +1,6 @@
 package dbg28
 
+
 /**
   * EECS 293
   * Created by Daniel on 11/4/2016.
@@ -8,8 +9,8 @@ package dbg28
   * Barricade: Accepts Dirty input from DataPackaging, sanitizes it, and passes it on to Pictures
   */
 object InputVerification {
-  var columns = _
-  var rows = _
+  var columns: Int = _
+  var rows: Int = _
   var singleGraphs: List[Graph] = List.empty[Graph]
   var layeredGraphs: List[Graph] = List.empty[Graph]
 
@@ -35,7 +36,7 @@ object InputVerification {
   def verify(): Unit = {
     //if conditions pass, add data to Pictures
     if(Option(columns).isDefined && Option(rows).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
-
+      println(dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs))
     }
     // If fail, print error and do nothing
   }

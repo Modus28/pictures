@@ -1,6 +1,6 @@
 package dbg28.Dirty
 
-import dbg28.{Graph, InputVerification, Point}
+import dbg28.{Graph, Point}
 
 import scala.util.matching.Regex
 
