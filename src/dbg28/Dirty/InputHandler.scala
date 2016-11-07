@@ -51,6 +51,7 @@ object InputHandler {
     InputVerification.verify()
 
     println(graphs.mkString("\n"))
-    println(layeredGraphs)
+    println()
+    println(layeredGraphs.mkString("\n"))
   }
 }

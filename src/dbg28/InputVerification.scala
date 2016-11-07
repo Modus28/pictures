@@ -8,8 +8,8 @@ package dbg28
   * Barricade: Accepts Dirty input from DataPackaging, sanitizes it, and passes it on to Pictures
   */
 object InputVerification {
-  var columns = 0
-  var rows = 0
+  var columns = _
+  var rows = _
   var singleGraphs: List[Graph] = List.empty[Graph]
   var layeredGraphs: List[Graph] = List.empty[Graph]
 
@@ -34,6 +34,9 @@ object InputVerification {
 
   def verify(): Unit = {
     //if conditions pass, add data to Pictures
+    if(Option(columns).isDefined && Option(rows).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
+
+    }
     // If fail, print error and do nothing
   }
 

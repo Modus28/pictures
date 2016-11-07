@@ -84,8 +84,8 @@ object DataPackaging {
     * @return Graph representation of input
     */
   def stringListToGraph(list: List[String], charExpected: Char): Graph = {
-    def isCapital(char: Char): Boolean = graphPattern.findFirstIn(char.toString).isDefined && (char equals charExpected)
-    val points = for (sIndex <- list.indices; charInd <- list(sIndex).indices if isCapital(list(sIndex)(charInd))) yield Point(sIndex, charInd)
+    def isCapitalAndEqual(char: Char): Boolean = graphPattern.findFirstIn(char.toString).isDefined && (char equals charExpected)
+    val points = for (sIndex <- list.indices; charInd <- list(sIndex).indices if isCapitalAndEqual(list(sIndex)(charInd))) yield Point(sIndex, charInd)
     val char: Character = list(points.head.x)(points.head.y)
     Graph(char, points.toSet)
   }
