@@ -43,16 +43,27 @@ object InputHandler {
     val rows = dimensions.head
     val columns = dimensions(1)
     InputVerification.setDimensions(rows, columns)
+
     val graphStrings = DataPackaging.partitionInputIntoGraphStrings(input, rows)
     val graphs = DataPackaging.stringsToGraphs(graphStrings dropRight 1)
-    InputVerification.addGraphs(graphs)
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
+    InputVerification.addGraphs(graphs)
     InputVerification.addLayeredGraph(layeredGraphs)
+
     InputVerification.verify()
     InputVerification.resetVerificationState()
 
     /*println(graphs.mkString("\n"))
     println()
     println(layeredGraphs.mkString("\n"))*/
+  }
+
+  /** TestHook: Subclass for testing private methods
+    *
+    */
+  object NestedHook {
+    // Calls readInput
+
+    def readInputAccessor: Seq[String] = readInput
   }
 }

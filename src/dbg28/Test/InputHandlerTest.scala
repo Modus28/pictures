@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream, PrintS
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 
+import dbg28.Dirty.InputHandler.NestedHook
 import org.junit.Assert._
 import org.junit.{After, Before, Test}
 
@@ -77,6 +78,7 @@ class InputHandlerTest {
     "E E E E E E . .\n\n\n"
 
   val inputHandler = dbg28.Dirty.InputHandler
+  val testHook = inputHandler.NestedHook
   var out = new ByteArrayOutputStream
   var err = new ByteArrayOutputStream
   var in: InputStream = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8))
@@ -96,6 +98,18 @@ class InputHandlerTest {
   }
 
 
+  @Test
+  def testReadInput(): Unit = {
+    Console.withIn(in) {
+      Console.withOut(out) {
+        val seq = testHook.readInputAccessor
+        print(seq.mkString("\n"))
+
+      }
+    }
+    assertEquals(str, out.toString + "\n\n")
+    // add 2 new lines to account for how readInput works
+  }
   /**
     * Tests the normal program execution
     * Good data: Correct graphs and layered output
