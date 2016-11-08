@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets
 
 import org.junit.Assert._
 import org.junit.{After, Before, Test}
+import junit.framework.Test
 
 
 
