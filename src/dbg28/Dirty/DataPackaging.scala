@@ -55,7 +55,7 @@ object DataPackaging {
     */
   def parseDimensions(toCheck: List[String]): List[String] = {
     val rows = rowOrColumnPattern.findFirstMatchIn(toCheck.head)
-    val columns = rowOrColumnPattern.findFirstMatchIn(toCheck(1))
+    val columns = rowOrColumnPattern.findFirstMatchIn((toCheck diff List(toCheck.head)).toString)
     if (rows.isEmpty | columns.isEmpty) {
       throw new IllegalArgumentException("First two lines do not contain rows and columns")
     }

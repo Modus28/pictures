@@ -11,7 +11,7 @@ package dbg28
 object InputVerification {
   var columns: Int = _
   var rows: Int = _
-  var singleGraphs: List[Graph] = List.empty[Graph]
+  var singleGraphs: List[Graph] = List.empty[Graph] // should assert sizes are the same in verify
   var layeredGraphs: List[Graph] = List.empty[Graph]
 
 
@@ -36,6 +36,8 @@ object InputVerification {
 
   def verify(): Unit = {
     //if conditions pass, add data to Pictures
+    // should verify that no excess characters exist in list
+    // should verify that all points in original set exist in layered set
 
     if(Option(columns).isDefined && Option(columns).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
       dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs)

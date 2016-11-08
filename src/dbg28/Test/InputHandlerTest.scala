@@ -96,11 +96,15 @@ class InputHandlerTest {
   }
 
 
+  /**
+    * Tests the normal program execution
+    * Good data: Correct graphs and layered output
+    */
   @Test
-  def testFullExecution(): Unit = {
+  def testMainAndProcessLog(): Unit = {
     Console.withIn(in){
       Console.withOut(out){
-        inputHandler.main(Array("lel + \n + lel"))
+        inputHandler.main(Array.empty[String])
       }
     }
     assertEquals("EDABC",out.toString)
