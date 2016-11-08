@@ -17,7 +17,7 @@ object Pictures{
     * @param graphList the separated picture
     * @return the order of the layers by character
     */
-  def solve(mergedGraph: List[Graph], graphList: List[Graph]): List[Char] = {
+  def solve(mergedGraph: List[Graph], graphList: List[Graph]): Unit = {
     var layerOrder: List[Char] = List()
     var mergedCopy = mergedGraph
     var graphCopy = graphList
@@ -29,7 +29,7 @@ object Pictures{
     }
 
     for (_ <- mergedCopy) { extractLowestLayer(lowestLayeredCharacter(mergedCopy, graphCopy)) }
-    layerOrder
+    print(layerOrder.mkString.toString)
   }
 
 

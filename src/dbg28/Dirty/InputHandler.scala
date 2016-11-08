@@ -40,7 +40,7 @@ object InputHandler {
     */
   def processInput(input: List[String]): Unit = {
     val dimensions = DataPackaging.parseDimensions(input)
-    val rows = dimensions.head;
+    val rows = dimensions.head
     val columns = dimensions(1)
     InputVerification.setDimensions(rows, columns)
     val graphStrings = DataPackaging.partitionInputIntoGraphStrings(input, rows)
@@ -50,8 +50,8 @@ object InputHandler {
     InputVerification.addLayeredGraph(layeredGraphs)
     InputVerification.verify()
 
-    println(graphs.mkString("\n"))
+    /*println(graphs.mkString("\n"))
     println()
-    println(layeredGraphs.mkString("\n"))
+    println(layeredGraphs.mkString("\n"))*/
   }
 }

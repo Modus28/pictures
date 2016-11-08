@@ -16,6 +16,7 @@ object InputVerification {
 
 
   def setDimensions(columns: String, rows: String): Unit = {
+
     this.columns = Integer.parseInt(columns)
     this.rows = Integer.parseInt(rows)
     // add verification checks
@@ -35,10 +36,13 @@ object InputVerification {
 
   def verify(): Unit = {
     //if conditions pass, add data to Pictures
-    if(Option(columns).isDefined && Option(rows).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
-      println(dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs))
+
+    if(Option(columns).isDefined && Option(columns).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
+      dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs)
     }
-    // If fail, print error and do nothing
+    else{
+      println("error")
+    }
   }
 
 }
