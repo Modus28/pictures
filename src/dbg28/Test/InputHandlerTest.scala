@@ -1,6 +1,5 @@
 package dbg28.Test
 
-
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream, PrintStream}
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
@@ -8,7 +7,6 @@ import java.nio.charset.StandardCharsets
 import org.junit.Assert._
 import org.junit.{After, Before, Test}
 
-import scala.io.Source
 
 
 

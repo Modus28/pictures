@@ -2,7 +2,7 @@ package dbg28.Dirty
 
 import dbg28.InputVerification
 import annotation.tailrec
-
+import scala.io.StdIn.readLine
 /**
   * EECS 293
   * Created by Daniel on 11/3/2016.
@@ -26,7 +26,7 @@ object InputHandler {
   private def readInput: Seq[String] = {
     @tailrec
     def readRecursively(input: Seq[String], wasEmpty: Boolean): Seq[String] = {
-      val currentLine = scala.io.StdIn.readLine()
+      val currentLine = readLine()
       val currentlyEmpty = currentLine.isEmpty
       if (currentlyEmpty && wasEmpty) input.reverse else readRecursively(currentLine +: input, currentlyEmpty)
     }
@@ -49,6 +49,7 @@ object InputHandler {
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
     InputVerification.addLayeredGraph(layeredGraphs)
     InputVerification.verify()
+    InputVerification.resetVerificationState()
 
     /*println(graphs.mkString("\n"))
     println()

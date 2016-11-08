@@ -21,4 +21,6 @@ doc/
 .idea/
 classes/
 out/
+target/
+project/
 
