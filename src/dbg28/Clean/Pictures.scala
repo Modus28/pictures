@@ -1,7 +1,7 @@
 package dbg28.Clean
 
 import dbg28.Graph
-
+import language.postfixOps
 
 /**
   * Pictures: Accepts Lists of Strings describing pictures and converts them into relations
@@ -10,6 +10,7 @@ import dbg28.Graph
   */
 object Pictures{
 
+  // Solving methods
 
   /**
     * Solve a given Merged Picture and its separated form
@@ -22,36 +23,37 @@ object Pictures{
     var mergedCopy = mergedGraph
     var graphCopy = graphList
 
-    def extractLowestLayer(char: Char): Unit = {
+    // Purges graphs with a given character from the lists, and adds the character to the layer order
+    def removeAndUpdateCharacterStatus(char: Char): Unit = {
         mergedCopy = mergedCopy diff mergedCopy.filter(_.char equals char)
         graphCopy = graphCopy diff graphCopy.filter(_.char equals char)
         layerOrder = layerOrder ::: List(char)
     }
 
-    for (_ <- mergedCopy) { extractLowestLayer(lowestLayeredCharacter(mergedCopy, graphCopy)) }
+    for (_ <- mergedCopy) { removeAndUpdateCharacterStatus(lowestLayeredCharacter(mergedCopy, graphCopy)) }
     print(layerOrder.mkString.toString)
   }
 
-
-
-  // check the intersect of each set inside merged for which graph is layered over another, and add a relation for it
+  /**
+    * Finds the lowest layered character from a merged graph and a list of unmerged graphs
+    * @param mergedGraph the merged graph to remove from
+    * @param graphsList the unmerged graphs to search through
+    * @return
+    */
   def lowestLayeredCharacter(mergedGraph: List[Graph], graphsList: List[Graph]): Char = {
       val lowestLayer: List[Graph] = mergedGraph.filter(isLowestLayer(_, graphsList))
       assert (lowestLayer.size equals 1) // Only one can be the lowest layer
       lowestLayer.head.char
   }
 
-
+  /**
+    * Determines if an unmerged graph is the lowest layer of a merged graph
+    * @param layer the graph to check lowest layer status of
+    * @param graphsList the list of graphs to search through
+    * @return if a graph is the lowest layer of a merged graph
+    */
   def isLowestLayer(layer: Graph, graphsList: List[Graph]): Boolean = {
-    val filteredGraph: List[Graph] = graphsList.filter(_.char != layer.char)
-    filteredGraph.forall(p => (p.points intersect layer.points).isEmpty)
+    graphsList.filter(_.char != layer.char).forall(_.points intersect layer.points isEmpty)
   }
-
-
-  // Merge relations into a single ordered string
-
-
-
-
 }
 

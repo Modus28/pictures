@@ -152,5 +152,4 @@ class DataPackagingTest {
       val numOfPoints = graphs.map(g => g.points.size).sum
        assertEquals(50, numOfPoints)
   }
-
 }

@@ -1,5 +1,7 @@
 package dbg28
 
+import dbg28.Clean.Pictures
+
 
 /**
   * EECS 293
@@ -12,7 +14,7 @@ object InputVerification {
   // Fields
   var columns: Int = _
   var rows: Int = _
-  var singleGraphs: List[Graph] = List.empty[Graph] // should assert sizes are the same in verify
+  var singleGraphs: List[Graph] = List.empty[Graph]
   var layeredGraphs: List[Graph] = List.empty[Graph]
 
   // Setters
@@ -21,7 +23,10 @@ object InputVerification {
   def setGraphs(graphsList: List[Graph]): Unit = singleGraphs = graphsList
 
 
-  // Other methods
+  /**
+    * Resets the Verifier to be used in future verifications cleanly
+    * Should never be needed, but this makes it robust in the case of unusual soft crashes
+    */
   def resetVerificationState(): Unit = {
     // wipe everything
     columns = 0
@@ -30,18 +35,47 @@ object InputVerification {
     layeredGraphs = null
   }
 
+  /**
+    * Verify that data is valid and if so, solve the picture.
+    */
   def verify(): Unit = {
-    //if conditions pass, add data to Pictures
-    // should verify that no excess characters exist in list
-    // should verify that all points in original set exist in layered set
+    val noExcess = noExcessCharactersExist(layeredGraphs,singleGraphs)
+    val sameSize = graphsAreSameSize(layeredGraphs, singleGraphs)
+    val nonEmptyGraphs = !List(layeredGraphs, singleGraphs).forall(_.isEmpty)
+    val verifications = List(noExcess, sameSize, nonEmptyGraphs)
 
-    if(Option(columns).isDefined && Option(columns).isDefined && Option(singleGraphs).isDefined && Option(layeredGraphs).isDefined){
-      dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs)
+    if(verifications.forall(_ equals true)){
+      Pictures.solve(layeredGraphs, singleGraphs)
     }
     else{
+      resetVerificationState()
       ErrorManager.reportError(this, "Some graph was malformed")
     }
   }
 
+
+  def isSolvable(layered: List[Graph], separated: List[Graph]): Boolean = {
+
+  }
+
+
+  /**
+    * Check that no points were removed or added from the graphs erroneously
+    * Specifically, checks that the union of all original points equals the union of all merged points
+    * @param layered the subgraphs of the layered picture
+    * @param separate the graphs that were not layered
+    * @return if the number of points in graphs of each type is the same
+    */
+  def noExcessCharactersExist(layered: List[Graph], separate: List[Graph]): Boolean = {
+    separate.map(_.points).reduce(_ union _) equals layered.map(_.points).reduce(_ union _)
+  }
+
+  /**
+    * Checks that the graphs have the same amount of different letters
+    * @param graphsA first graph List to check size of
+    * @param graphsB second graph List to check size of
+    * @return if the sizes of the graphs are the same
+    */
+  def graphsAreSameSize(graphsA: List[Graph], graphsB: List[Graph]): Boolean = graphsA.size equals graphsB.size
 }
 
