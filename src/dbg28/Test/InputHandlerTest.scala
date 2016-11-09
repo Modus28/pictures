@@ -1,21 +1,17 @@
 package dbg28.Test
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream, PrintStream}
-import java.io.ByteArrayInputStream
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import java.nio.charset.StandardCharsets
-
-import dbg28.Dirty.InputHandler.NestedHook
 import org.junit.Assert._
 import org.junit.{After, Before, Test}
-
-
-
 
 
 /**
   * EECS 293
   * Created by Daniel on 11/7/2016.
   * dbg28@case.edu
+  *
+  * Tester for the general program execution, covers 90% of all code coverage
   */
 class InputHandlerTest {
 
@@ -78,7 +74,7 @@ class InputHandlerTest {
     "E E E E E E . .\n\n\n"
 
   val inputHandler = dbg28.Dirty.InputHandler
-  val testHook = inputHandler.NestedHook
+  val testHook = inputHandler.TestHook
   var out = new ByteArrayOutputStream
   var err = new ByteArrayOutputStream
   var in: InputStream = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8))
@@ -98,19 +94,27 @@ class InputHandlerTest {
   }
 
 
+
+
+  /**
+    * Tests readInput
+    * All Data: No such thing as good/bad data
+    * Branching: If condition both true and false at different times
+    */
   @Test
   def testReadInput(): Unit = {
     Console.withIn(in) {
       Console.withOut(out) {
         val seq = testHook.readInputAccessor
         print(seq.mkString("\n"))
-
       }
     }
     assertEquals(str, out.toString + "\n\n")
-    // add 2 new lines to account for how readInput works
+    // add 2 new lines to account for readInput's double new line check
   }
+  
   /**
+    * Tests Main and Process Input
     * Tests the normal program execution
     * Good data: Correct graphs and layered output
     */

@@ -24,6 +24,7 @@ object InputHandler {
     * @return user input
     */
   private def readInput: Seq[String] = {
+    /* Reads the next line and adds it to a list, halts when we find two empty lines in a row*/
     @tailrec
     def readRecursively(input: Seq[String], wasEmpty: Boolean): Seq[String] = {
       val currentLine = readLine()
@@ -61,9 +62,8 @@ object InputHandler {
   /** TestHook: Subclass for testing private methods
     *
     */
-  object NestedHook {
+  object TestHook {
     // Calls readInput
-
     def readInputAccessor: Seq[String] = readInput
   }
 }
