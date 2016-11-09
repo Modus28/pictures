@@ -1,7 +1,6 @@
 package dbg28.Dirty
 
 import dbg28.{Graph, Point}
-
 import scala.util.matching.Regex
 
 
@@ -27,7 +26,7 @@ object DataPackaging {
     */
   def stringsToGraphs(allStrings: List[List[String]]): List[Graph] = {
     // Nested method that extracts character of a List[String] that is a Graph
-    def getCharOfStringList(list: CharSequence): Char = graphPattern.findFirstIn(list).getOrElse("").head
+    def getCharOfStringList(list: CharSequence): Char = graphPattern.findFirstIn(list).getOrElse(" ").head
     allStrings.map(f => {
       val char = getCharOfStringList(f.flatten.mkString)
       stringListToGraph(f, char)
@@ -86,7 +85,6 @@ object DataPackaging {
   def stringListToGraph(list: List[String], charExpected: Char): Graph = {
     def isCapitalAndEqual(char: Char): Boolean = graphPattern.findFirstIn(char.toString).isDefined && (char equals charExpected)
     val points = for (sIndex <- list.indices; charInd <- list(sIndex).indices if isCapitalAndEqual(list(sIndex)(charInd))) yield Point(sIndex, charInd)
-    val char: Character = list(points.head.x)(points.head.y)
-    Graph(char, points.toSet)
+    Graph(charExpected, points.toSet)
   }
 }
