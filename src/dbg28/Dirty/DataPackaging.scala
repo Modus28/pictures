@@ -60,15 +60,15 @@ object DataPackaging {
     * @param toCheck the UserInput list to find dimensions in
     * @return the Strings containing the graph dimensions
     */
-  def parseDimensions(toCheck: List[String]): List[String] = {
+  def parseDimensions(toCheck: List[String]): List[Int] = {
     val rows = rowOrColumnPattern.findFirstMatchIn(toCheck.head)
     val columns = rowOrColumnPattern.findFirstMatchIn((toCheck diff List(toCheck.head)).toString)
     if (rows.isEmpty | columns.isEmpty) {
-      throw new IllegalArgumentException("First two lines do not contain rows and columns")
+      ErrorManager.reportError(this,"First two lines do not contain rows and columns")
+      null
     }
     else {
-     // println(s"rows: ${rows.get.group(0)}, columns: ${columns.get.group(1)}")
-      List(rows.get.group(0), columns.get.group(0))
+      List(rows.get.group(0).toInt, columns.get.group(0).toInt)
     }
   }
 
@@ -92,6 +92,7 @@ object DataPackaging {
     * @return Graph representation of input
     */
   def stringListToGraph(list: List[String], charExpected: Char): Graph = {
+    // Returns true if the input character matches the method parameter and is a capital letter
     def isCapitalAndEqual(char: Char): Boolean = graphPattern.findFirstIn(char.toString).isDefined && (char equals charExpected)
     val points = for (sIndex <- list.indices; charInd <- list(sIndex).indices if isCapitalAndEqual(list(sIndex)(charInd))) yield Point(sIndex, charInd)
     Graph(charExpected, points.toSet)

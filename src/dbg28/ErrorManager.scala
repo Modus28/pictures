@@ -16,7 +16,6 @@ object ErrorManager {
   var errorState: Boolean = false
 
   def reportError(objectWithError: Object, descr: String): Unit ={
-    //println(s"Our Error: $objectWithError, $descr")
     errorState = true
     print("error")
     log(objectWithError, descr)
@@ -26,7 +25,7 @@ object ErrorManager {
     val dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss")
     val date = new Date
 
-    val fileHandler = new FileHandler("pictures.log", false)
+    val fileHandler = new FileHandler("pictures.log", true)
     // Log will save in the pictures repository, but where depends on the system
     // Ctrl+F "pictures.log" to find it
     fileHandler.setFormatter(new SimpleFormatter())

@@ -54,13 +54,12 @@ object InputHandler {
   def processInput(input: List[String]): Unit = {
     val dimensions = DataPackaging.parseDimensions(input)
     checkErrorState()
-    InputVerification.setDimensions(dimensions.head.toInt, dimensions(1).toInt)
+    InputVerification.setDimensions(dimensions.head, dimensions(1))
     // Input Verification doesn't need to check these, as ParseDimensions already does.
 
 
-    val rows = dimensions.head.toInt
-    val columns = dimensions(1).toInt
-    val graphStrings = DataPackaging.partitionStringLists(input, rows)
+
+    val graphStrings = DataPackaging.partitionStringLists(input, dimensions.head)
     //println("We partitioned string lists")
     checkErrorState()
 
