@@ -13,7 +13,7 @@ import org.junit.{After, Before, Test}
   *
   * Tester for the general program execution, covers 90% of all code coverage
   */
-class InputHandlerTest {
+object InputHandlerTest {
 
   val str =
     "9" + "\n" +
@@ -112,7 +112,7 @@ class InputHandlerTest {
     assertEquals(str, out.toString + "\n\n")
     // add 2 new lines to account for readInput's double new line check
   }
-  
+
   /**
     * Tests Main and Process Input
     * Tests the normal program execution

@@ -41,11 +41,11 @@ object InputHandler {
     */
   def processInput(input: List[String]): Unit = {
     val dimensions = DataPackaging.parseDimensions(input)
-    val rows = dimensions.head
-    val columns = dimensions(1)
-    InputVerification.setDimensions(rows, columns)
 
-    val graphStrings = DataPackaging.partitionInputIntoGraphStrings(input, rows)
+    InputVerification.setDimensions(dimensions.head, dimensions(1))
+    val rows = dimensions.head.toInt
+    val columns = dimensions(1).toInt
+    val graphStrings = DataPackaging.partitionStringLists(input, rows)
     val graphs = DataPackaging.stringsToGraphs(graphStrings dropRight 1)
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
     InputVerification.addGraphs(graphs)

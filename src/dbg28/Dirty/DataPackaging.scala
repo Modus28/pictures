@@ -15,6 +15,7 @@ import scala.util.matching.Regex
 object DataPackaging {
   // Fields
   val graphPattern: Regex = "([A-Z])".r
+  val intPattern: Regex = "([0-9])".r
   val rowOrColumnPattern: Regex = "(\\d)".r
 
   // Methods
@@ -40,10 +41,12 @@ object DataPackaging {
     * @param rows  amount of rows each graph should contain
     * @return a List of Lists of Strings, where each sublist is all the strings in one graph
     */
-  def partitionInputIntoGraphStrings(input: List[String], rows: String): List[List[String]] = {
+  def partitionStringLists(input: List[String], rows: Int): List[List[String]] = {
     val inputWithoutDimensions = input diff List(input.head, input(1))
-    val rowInt: Int = rows.toInt // maybe try catch this
-    inputWithoutDimensions.sliding(rowInt, rowInt + 1).toList // check toInt failures
+    if(rows < 1){
+
+    }
+    inputWithoutDimensions.sliding(rows, rows + 1).toList // check toInt failures
   }
 
   /**
