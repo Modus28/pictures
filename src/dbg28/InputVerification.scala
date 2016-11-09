@@ -1,6 +1,7 @@
 package dbg28
 
 import dbg28.Clean.Pictures
+import language.postfixOps
 
 
 /**
@@ -39,10 +40,12 @@ object InputVerification {
     * Verify that data is valid and if so, solve the picture.
     */
   def verify(): Unit = {
-    val noExcess = noExcessCharactersExist(layeredGraphs,singleGraphs)
-    val sameSize = graphsAreSameSize(layeredGraphs, singleGraphs)
-    val nonEmptyGraphs = !List(layeredGraphs, singleGraphs).forall(_.isEmpty)
-    val verifications = List(noExcess, sameSize, nonEmptyGraphs)
+    def nonEmptyGraphs = !List(layeredGraphs, singleGraphs).forall(_.isEmpty)
+    def noExcess = noExcessCharactersExist(layeredGraphs,singleGraphs)
+    def sameSize = graphsAreSameSize(layeredGraphs, singleGraphs)
+    def canBeSolved = isSolvable(singleGraphs)
+    def hasMultipleSolutions = hasMultipleLowestLayers(layeredGraphs, singleGraphs)
+    def verifications = List(nonEmptyGraphs, sameSize, noExcess, canBeSolved, hasMultipleSolutions)
 
     if(verifications.forall(_ equals true)){
       Pictures.solve(layeredGraphs, singleGraphs)
@@ -54,8 +57,16 @@ object InputVerification {
   }
 
 
-  def isSolvable(layered: List[Graph], separated: List[Graph]): Boolean = {
-
+  /**
+    * Determines if a graph is solvable, based on the following criteria:
+    * Each Graph has points - Satisfied by the below criteria
+    * Each Graph has at least one point that overlaps another Graph's point on the graph, indicating a direct chain of overlap
+    * @param graphs the input graphs to check
+    * @return
+    */
+  def isSolvable(graphs: List[Graph]): Boolean = {
+      def hasAtLeastOneOverlap(g: Graph): Boolean = !graphs.forall(_.points.intersect(g.points).isEmpty)
+      graphs.forall(hasAtLeastOneOverlap)
   }
 
 
@@ -77,5 +88,15 @@ object InputVerification {
     * @return if the sizes of the graphs are the same
     */
   def graphsAreSameSize(graphsA: List[Graph], graphsB: List[Graph]): Boolean = graphsA.size equals graphsB.size
+
+  /**
+    * Determines if a graph input has multiple solutions at any time
+    * @param layered the list of layered graphs
+    * @param separated the list of separated graphs
+    */
+  def hasMultipleLowestLayers(layered: List[Graph], separated: List[Graph]): Boolean = {
+    def isLowest(g: Graph) = separated.filter(_.char != g.char).forall(_.points intersect g.points isEmpty)
+    layered.count(isLowest) equals 1
+  }
 }
 

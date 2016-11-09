@@ -36,18 +36,24 @@ object Pictures{
 
   /**
     * Finds the lowest layered character from a merged graph and a list of unmerged graphs
+    * Finds the lowest layered character among the lists usingi isLowestLayer repeatedly
     * @param mergedGraph the merged graph to remove from
     * @param graphsList the unmerged graphs to search through
     * @return
     */
   def lowestLayeredCharacter(mergedGraph: List[Graph], graphsList: List[Graph]): Char = {
       val lowestLayer: List[Graph] = mergedGraph.filter(isLowestLayer(_, graphsList))
-      assert (lowestLayer.size equals 1) // Only one can be the lowest layer
+      val sizeIsOne: Boolean = lowestLayer.size equals 1
+      assert (sizeIsOne)
       lowestLayer.head.char
   }
 
   /**
     * Determines if an unmerged graph is the lowest layer of a merged graph
+    * True if: for a character type in a merged graph, it overlaps nothing
+    * So for each original layer of a different character, its points do not intersect
+    * with the points of the single merged later
+    *
     * @param layer the graph to check lowest layer status of
     * @param graphsList the list of graphs to search through
     * @return if a graph is the lowest layer of a merged graph
