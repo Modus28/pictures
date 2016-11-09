@@ -9,23 +9,19 @@ package dbg28
   * Barricade: Accepts Dirty input from DataPackaging, sanitizes it, and passes it on to Pictures
   */
 object InputVerification {
+  // Fields
   var columns: Int = _
   var rows: Int = _
   var singleGraphs: List[Graph] = List.empty[Graph] // should assert sizes are the same in verify
   var layeredGraphs: List[Graph] = List.empty[Graph]
 
+  // Setters
+  def setDimensions(columns: Int, rows: Int): Unit = this.columns = columns; this.rows = rows
+  def setLayeredGraph(layeredGraph: List[Graph]): Unit = layeredGraphs = layeredGraph
+  def setGraphs(graphsList: List[Graph]): Unit = singleGraphs = graphsList
 
-  def setDimensions(columns: String, rows: String): Unit = {
 
-    this.columns = Integer.parseInt(columns)
-    this.rows = Integer.parseInt(rows)
-    // add verification checks
-  }
-
-  def addLayeredGraph(layeredGraph: List[Graph]): Unit = layeredGraphs = layeredGraph
-
-  def addGraphs(graphsList: List[Graph]): Unit = singleGraphs = graphsList
-
+  // Other methods
   def resetVerificationState(): Unit = {
     // wipe everything
     columns = 0
@@ -43,7 +39,7 @@ object InputVerification {
       dbg28.Clean.Pictures.solve(layeredGraphs, singleGraphs)
     }
     else{
-      println("error")
+      ErrorManager.reportError(this, "Some graph was malformed")
     }
   }
 

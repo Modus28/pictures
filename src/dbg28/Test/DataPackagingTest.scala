@@ -6,7 +6,7 @@ import org.junit.Assert._
 import org.junit.{After, Before, Rule, Test}
 import dbg28.Dirty.DataPackaging
 import dbg28.ErrorManager
-import dbg28.Test.InputHandlerTest
+
 /**
   * EECS 293
   * Created by Daniel on 11/8/2016.
@@ -22,9 +22,20 @@ class DataPackagingTest {
     "List(. C C C . . . ., . C . C . . . ., . C . C . . . ., . C C C . . . ., . . . . . . . ., . . . . . . . ., . . . . . . . ., . . . . . . . ., . . . . . . . .)\n" +
     "List(. C C C . . . ., E C B C B B . ., D C B C D B . ., D C C C . B . ., D . B . A B A A, D . B B B B . A, D D D D A D . A, E . . . A A A A, E E E E E E . .)"
 
+  val inputHandlerTest = new InputHandlerTest // to access big strings inside it
+  var out = new ByteArrayOutputStream
+
+  // Tests
 
   @After
-  def resetErrorState(): Unit = {
+  def setUp(): Unit = {
+    out = new ByteArrayOutputStream
+    ErrorManager.errorState = false
+  }
+
+  @After
+  def tearDown(): Unit = {
+    out = null
     ErrorManager.errorState = false
   }
   /**
@@ -35,7 +46,7 @@ class DataPackagingTest {
     */
   @Test
   def partitionStringListsGoodData(): Unit = {
-    val strList: List[String] = InputHandlerTest.str.split("\n").toList
+    val strList: List[String] = inputHandlerTest.str.split("\n").toList
     val graphStrings = DataPackaging.partitionStringLists(strList, 9).mkString("\n")
     assertEquals(listOfGraphStrings, graphStrings)
   }
@@ -48,10 +59,11 @@ class DataPackagingTest {
     */
   @Test
   def partitionStringListsBadData(): Unit = {
-    val strList: List[String] = InputHandlerTest.str.split("\n").toList
-    val out = new ByteArrayOutputStream
-    val graphStrings = DataPackaging.partitionStringLists(strList, 0)
-    assert(ErrorManager.errorState)
-  }
+    val strList: List[String] = inputHandlerTest.str.split("\n").toList
+    Console.withOut(out) {
+      DataPackaging.partitionStringLists(strList, 0)
+    }
+    assertEquals("error", out.toString)
 
+  }
 }

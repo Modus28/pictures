@@ -16,6 +16,7 @@ object ErrorManager {
   var errorState: Boolean = false
 
   def reportError(objectWithError: Object, descr: String): Unit ={
+    //println(s"Our Error: $objectWithError, $descr")
     errorState = true
     print("error")
     log(objectWithError, descr)

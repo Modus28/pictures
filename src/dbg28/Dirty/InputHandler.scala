@@ -15,7 +15,9 @@ import scala.io.StdIn.readLine
 object InputHandler {
 
   def main(args: Array[String]) {
-    val userInput: Seq[String] = readInput
+    val userInput: Seq[String] = readInput // Get input
+    ErrorManager.errorState = false // Reset error states if bad last termination
+    InputVerification.resetVerificationState()
     processInput(userInput.toList)
   }
 
@@ -38,7 +40,6 @@ object InputHandler {
 
   private def checkErrorState(): Unit = {
     if(ErrorManager.errorState){
-      InputVerification.resetVerificationState()
       System.exit(10)
     }
     else{
@@ -52,23 +53,25 @@ object InputHandler {
     */
   def processInput(input: List[String]): Unit = {
     val dimensions = DataPackaging.parseDimensions(input)
-
-    InputVerification.setDimensions(dimensions.head, dimensions(1))
     checkErrorState()
+    InputVerification.setDimensions(dimensions.head.toInt, dimensions(1).toInt)
+    // Input Verification doesn't need to check these, as ParseDimensions already does.
+
 
     val rows = dimensions.head.toInt
     val columns = dimensions(1).toInt
     val graphStrings = DataPackaging.partitionStringLists(input, rows)
+    //println("We partitioned string lists")
     checkErrorState()
 
     val graphs = DataPackaging.stringsToGraphs(graphStrings dropRight 1)
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
-
+    //println("We converted strings to graphs")
     checkErrorState()
-    InputVerification.addGraphs(graphs)
-    InputVerification.addLayeredGraph(layeredGraphs)
+    InputVerification.setGraphs(graphs)
+    InputVerification.setLayeredGraph(layeredGraphs)
     InputVerification.verify()
-
+    //println("We did everything but solve")
     checkErrorState()
 
     /*println(graphs.mkString("\n"))

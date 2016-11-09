@@ -2,6 +2,8 @@ package dbg28.Test
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import java.nio.charset.StandardCharsets
+
+import dbg28.ErrorManager
 import org.junit.Assert._
 import org.junit.{After, Before, Test}
 
@@ -13,7 +15,7 @@ import org.junit.{After, Before, Test}
   *
   * Tester for the general program execution, covers 90% of all code coverage
   */
-object InputHandlerTest {
+class InputHandlerTest {
 
   val str =
     "9" + "\n" +
@@ -84,6 +86,7 @@ object InputHandlerTest {
     out = new ByteArrayOutputStream
     err = new ByteArrayOutputStream
     in = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8))
+    ErrorManager.errorState = false
   }
 
   @After
@@ -91,9 +94,8 @@ object InputHandlerTest {
     out = null
     err = null
     in = null
+    ErrorManager.errorState = false
   }
-
-
 
 
   /**
@@ -120,6 +122,7 @@ object InputHandlerTest {
     */
   @Test
   def testMainAndProcessLog(): Unit = {
+    ErrorManager.errorState = false
     Console.withIn(in){
       Console.withOut(out){
         inputHandler.main(Array.empty[String])

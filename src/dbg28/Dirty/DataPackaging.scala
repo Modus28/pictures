@@ -45,7 +45,8 @@ object DataPackaging {
   def partitionStringLists(input: List[String], rows: Int): List[List[String]] = {
     val inputWithoutDimensions = input diff List(input.head, input(1))
     if(rows < 1){
-      ErrorManager.reportError(this, "partitionStringLists: Rows < 1")
+      //println(s"What are the rows? $rows")
+      ErrorManager.reportError(this, s"partitionStringLists: Rows < 1, rows: $rows")
       null
     }
     else{
@@ -66,6 +67,7 @@ object DataPackaging {
       throw new IllegalArgumentException("First two lines do not contain rows and columns")
     }
     else {
+     // println(s"rows: ${rows.get.group(0)}, columns: ${columns.get.group(1)}")
       List(rows.get.group(0), columns.get.group(0))
     }
   }
