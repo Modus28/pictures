@@ -40,12 +40,12 @@ object InputVerification {
     * Verify that data is valid and if so, solve the picture.
     */
   def verify(): Unit = {
-    def nonEmptyGraphs = !List(layeredGraphs, singleGraphs).forall(_.isEmpty)
-    def noExcess = noExcessCharactersExist(layeredGraphs,singleGraphs)
-    def sameSize = graphsAreSameSize(layeredGraphs, singleGraphs)
-    def canBeSolved = isSolvable(singleGraphs)
-    def hasMultipleSolutions = hasMultipleLowestLayers(layeredGraphs, singleGraphs)
-    def verifications = List(nonEmptyGraphs, sameSize, noExcess, canBeSolved, hasMultipleSolutions)
+    val nonEmptyGraphs = !List(layeredGraphs, singleGraphs).forall(_.isEmpty)
+    val noExcess = noExcessCharactersExist(layeredGraphs,singleGraphs)
+    val sameSize = graphsAreSameSize(layeredGraphs, singleGraphs)
+    val canBeSolved = isSolvable(singleGraphs)
+    val hasMultipleSolutions = hasMultipleLowestLayers(layeredGraphs, singleGraphs)
+    val verifications = List(nonEmptyGraphs, sameSize, noExcess, canBeSolved, hasMultipleSolutions)
 
     if(verifications.forall(_ equals true)){
       Pictures.solve(layeredGraphs, singleGraphs)

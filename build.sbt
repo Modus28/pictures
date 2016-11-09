@@ -4,7 +4,7 @@ version := "1.0"
 
 scalaVersion := "2.11.8"
 
-scalaSource in Compile := baseDirectory.value / "src/dbg28"
+scalaSource in Compile := baseDirectory.value / "src"
 
 scalaSource in Test := baseDirectory.value / "src/dbg28/Test"
 fork := true

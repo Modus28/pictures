@@ -55,27 +55,18 @@ object InputHandler {
     val dimensions = DataPackaging.parseDimensions(input)
     checkErrorState()
     InputVerification.setDimensions(dimensions.head, dimensions(1))
-    // Input Verification doesn't need to check these, as ParseDimensions already does.
-
-
 
     val graphStrings = DataPackaging.partitionStringLists(input, dimensions.head)
-    //println("We partitioned string lists")
     checkErrorState()
 
     val graphs = DataPackaging.stringsToGraphs(graphStrings dropRight 1)
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
-    //println("We converted strings to graphs")
     checkErrorState()
+
     InputVerification.setGraphs(graphs)
     InputVerification.setLayeredGraph(layeredGraphs)
     InputVerification.verify()
-    //println("We did everything but solve")
     checkErrorState()
-
-    /*println(graphs.mkString("\n"))
-    println()
-    println(layeredGraphs.mkString("\n"))*/
   }
 
   /** TestHook: Subclass for testing private methods
