@@ -1,6 +1,7 @@
 package dbg28.Dirty
 
-import dbg28.{Graph, Point}
+import dbg28.{ErrorManager, Graph, Point}
+
 import scala.util.matching.Regex
 
 
@@ -44,9 +45,12 @@ object DataPackaging {
   def partitionStringLists(input: List[String], rows: Int): List[List[String]] = {
     val inputWithoutDimensions = input diff List(input.head, input(1))
     if(rows < 1){
-
+      ErrorManager.reportError(this, "partitionStringLists: Rows < 1")
+      null
     }
-    inputWithoutDimensions.sliding(rows, rows + 1).toList // check toInt failures
+    else{
+      inputWithoutDimensions.sliding(rows, rows + 1).toList
+    }
   }
 
   /**

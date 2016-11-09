@@ -1,6 +1,7 @@
 package dbg28.Dirty
 
-import dbg28.InputVerification
+import dbg28.{ErrorManager, InputVerification}
+
 import annotation.tailrec
 import scala.io.StdIn.readLine
 /**
@@ -34,6 +35,16 @@ object InputHandler {
     readRecursively(Seq[String](), wasEmpty = false)
   }
 
+
+  private def checkErrorState(): Unit = {
+    if(ErrorManager.errorState){
+      InputVerification.resetVerificationState()
+      System.exit(10)
+    }
+    else{
+      // continue
+    }
+  }
   /**
     * Accepts user input, converts it to a usable form and sends it to be verified
     *
@@ -43,16 +54,22 @@ object InputHandler {
     val dimensions = DataPackaging.parseDimensions(input)
 
     InputVerification.setDimensions(dimensions.head, dimensions(1))
+    checkErrorState()
+
     val rows = dimensions.head.toInt
     val columns = dimensions(1).toInt
     val graphStrings = DataPackaging.partitionStringLists(input, rows)
+    checkErrorState()
+
     val graphs = DataPackaging.stringsToGraphs(graphStrings dropRight 1)
     val layeredGraphs = DataPackaging.stringListToLayeredGraph(graphStrings.last)
+
+    checkErrorState()
     InputVerification.addGraphs(graphs)
     InputVerification.addLayeredGraph(layeredGraphs)
-
     InputVerification.verify()
-    InputVerification.resetVerificationState()
+
+    checkErrorState()
 
     /*println(graphs.mkString("\n"))
     println()
@@ -65,5 +82,6 @@ object InputHandler {
   object TestHook {
     // Calls readInput
     def readInputAccessor: Seq[String] = readInput
+    def checkErrorStateAccessor(): Unit = checkErrorState()
   }
 }
